@@ -26,8 +26,5 @@ public class PlayerMovement : NetworkBehaviour
         //{
         //}
         transform.position += dir * Speed * Time.deltaTime;
-
-
-      
     }
 }
