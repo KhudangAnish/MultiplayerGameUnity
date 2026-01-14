@@ -14,28 +14,43 @@ public class GameManager : NetworkBehaviour
 {
     public State CurrentGameState = State.Setup;
     private NetworkVariable<int> playerCount = new NetworkVariable<int>();
-   // private NetworkVariable<List<NetworkObject>> listOfPlayers = new NetworkVariable<List<NetworkObject>>();
-    
+    // private NetworkVariable<List<NetworkObject>> listOfPlayers = new NetworkVariable<List<NetworkObject>>();
 
+    private static GameManager instance;
+    public static GameManager Instance { get => instance; set => instance = value; }
+
+
+  
+
+    private void Awake()
+    {
+        Debug.Log("DO I RUN?");
+    }
 
     public override void OnNetworkSpawn()
     {
         // Add to playercount
+        if (instance != null)
+        {
+            Destroy(gameObject);
+        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
 
-        if(IsHost)
+        if (IsHost)
         {
             playerCount.Value = 1;
             //  listOfPlayers.Value.Add()
-            Debug.Log(GameObject.Find("Player(Clone)").GetComponent<NetworkObject>().OwnerClientId);
         }
         else
         {
             ChangePlayerCountServerRpc(1);
         }
 
+       // Debug.Log(GetComponent<NetworkObject>().OwnerClientId)
+       // Debug.Log(GameObject.Find("Player(Clone)").GetComponent<NetworkObject>().OwnerClientId);
 
-      
-     
+
     }
     public override void OnNetworkDespawn()
     {
@@ -72,7 +87,7 @@ public class GameManager : NetworkBehaviour
     private void StartGame()
     {
         StartGameClientRpc();
-        InfectPeople();
+        RandomlyChooseAPersonToInfect();
     }
 
     [Rpc(SendTo.Server)]
@@ -87,10 +102,17 @@ public class GameManager : NetworkBehaviour
     {
         CurrentGameState = State.Playing;
     }
-    private void InfectPeople()
+    private void RandomlyChooseAPersonToInfect()
     {
         //Randomly choose a person to infect
-        int infectedPersonID = Random.Range(0, playerCount.Value);
+        int infectedPersonID = Random.Range(0, playerCount.Value + 1);
+        InfectRpc(infectedPersonID);
+    }
+
+    [Rpc(SendTo.Server)]
+    public void InfectPersonServerRpc(int infectedPersonID)
+    {
+        Debug.Log("Arrived in server");
         InfectRpc(infectedPersonID);
     }
 
@@ -98,6 +120,7 @@ public class GameManager : NetworkBehaviour
     private void InfectRpc(int infectedPersonID)
     {
         //Person that gets infected
+        Debug.Log("INFECTING RPC");
         NetworkObject infectedPerson = NetworkManager.Singleton.SpawnManager.SpawnedObjects[(ulong)infectedPersonID];
         infectedPerson.GetComponent<PlayerController>().GetInfected();
     }

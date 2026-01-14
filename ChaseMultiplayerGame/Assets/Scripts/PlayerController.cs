@@ -15,11 +15,45 @@ public class PlayerController : NetworkBehaviour
        // GetComponentInChildren<MeshRenderer>().material = nonInfectedMaterial;
     }
 
-
+    //private void Update()
+    //{
+    //    if(isInfected)
+    //    {
+    //        //Logic for effected
+    //    }
+    //    else
+    //    {
+    //        //If not effected do what?
+    //    }
+    //}
 
     public void GetInfected()
     {
         isInfected = true;
+        Debug.Log($"Player {GetComponent<NetworkObject>().OwnerClientId} has been infected");
         GetComponentInChildren<MeshRenderer>().material = infectedMaterial;
+    }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(isInfected)
+        {
+           //If collision is player
+           if(collision.collider.GetComponent<PlayerController>())
+            {
+                var playerToInfect = collision.collider.GetComponent<PlayerController>();
+                if (playerToInfect.IsInfected == true) return;
+
+                //If its not infected
+
+                Debug.Log("Find person to infect with the woke virus");
+                var ownerClientId = (int)playerToInfect.GetComponent<NetworkObject>().OwnerClientId;
+                Debug.Log("players id is " + ownerClientId);
+                if (GameManager.Instance == null) Debug.Log("GameManager is null?");
+                GameManager.Instance.InfectPersonServerRpc(ownerClientId);
+
+            }
+        }
     }
 }
