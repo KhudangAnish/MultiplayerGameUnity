@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -87,9 +88,30 @@ public class GameManager : NetworkBehaviour
         if(allInfected) 
         {
             allIsInfected.Value = true;
-            ChangeStateRpc(State.Ended);
+            //ChangeStateRpc(State.Ended);
+            StartCoroutine(DelayRestart());
         }
     }
+
+    IEnumerator DelayRestart()
+    {
+        yield return new WaitForSeconds(0f);
+        OnGameRestartRpc();
+
+        currentTime = 0;
+        StartGame();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void OnGameRestartRpc()
+    {
+        var getPlayers = NetworkManager.Singleton.ConnectedClientsList;
+        foreach (var player in getPlayers)
+        {
+            player.PlayerObject.GetComponent<PlayerController>().Reset();
+        }
+    }
+
     public void StartGame()
     {
         ChangeStateRpc(State.Playing);

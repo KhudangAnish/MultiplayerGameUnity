@@ -29,4 +29,14 @@ public class PlayerController : NetworkBehaviour
 
 
     }
+
+    public void Reset()
+    {
+        transform.position = Random.insideUnitSphere * 20;
+        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
+        GetComponentInChildren<MeshRenderer>().material = nonInfectedMaterial;
+        isInfected = false;
+    }
+
 }
