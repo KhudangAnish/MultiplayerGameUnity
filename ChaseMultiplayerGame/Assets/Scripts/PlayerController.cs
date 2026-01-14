@@ -15,6 +15,13 @@ public class PlayerController : NetworkBehaviour
        // GetComponentInChildren<MeshRenderer>().material = nonInfectedMaterial;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log($"client id{GetComponent<NetworkObject>().OwnerClientId}");
+        Debug.Log($"network id{GetComponent<NetworkObject>().NetworkObjectId}");
+
+    }
+
     //private void Update()
     //{
     //    if(isInfected)

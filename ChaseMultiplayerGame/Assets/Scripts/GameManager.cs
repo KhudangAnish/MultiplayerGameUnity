@@ -105,7 +105,7 @@ public class GameManager : NetworkBehaviour
     private void RandomlyChooseAPersonToInfect()
     {
         //Randomly choose a person to infect
-        int infectedPersonID = Random.Range(0, playerCount.Value + 1);
+        int infectedPersonID = Random.Range(0, playerCount.Value);
         InfectRpc(infectedPersonID);
     }
 
@@ -121,7 +121,8 @@ public class GameManager : NetworkBehaviour
     {
         //Person that gets infected
         Debug.Log("INFECTING RPC");
-        NetworkObject infectedPerson = NetworkManager.Singleton.SpawnManager.SpawnedObjects[(ulong)infectedPersonID];
+       // NetworkObject infectedPerson = NetworkManager.Singleton.SpawnManager.SpawnedObjects[(ulong)infectedPersonID];
+        NetworkObject infectedPerson = NetworkManager.Singleton.ConnectedClients[(ulong)infectedPersonID].PlayerObject;
         infectedPerson.GetComponent<PlayerController>().GetInfected();
     }
 }
