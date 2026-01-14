@@ -93,7 +93,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: faff66d54795ec545bf5ef997dc964da, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -194,7 +194,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554490279226785055}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac35373b42abe46ea8f7cab1a1c353f0, type: 3}
   m_Name: 
@@ -227,3 +227,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   ShowTopMostFoldoutHeaderGroup: 1
+  nonInfectedMaterial: {fileID: 2100000, guid: 9bc3f467ed9a06c4e979e4cff2ded1e7, type: 2}
+  infectedMaterial: {fileID: 2100000, guid: faff66d54795ec545bf5ef997dc964da, type: 2}

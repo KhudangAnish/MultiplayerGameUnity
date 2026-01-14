@@ -14,8 +14,8 @@ public class GameManager : NetworkBehaviour
 {
     public State CurrentGameState = State.Setup;
     private NetworkVariable<int> playerCount = new NetworkVariable<int>();
-  //  private List<NetworkObject> listOfPlayers;
-
+   // private NetworkVariable<List<NetworkObject>> listOfPlayers = new NetworkVariable<List<NetworkObject>>();
+    
 
 
     public override void OnNetworkSpawn()
@@ -25,11 +25,16 @@ public class GameManager : NetworkBehaviour
         if(IsHost)
         {
             playerCount.Value = 1;
+            //  listOfPlayers.Value.Add()
+            Debug.Log(GameObject.Find("Player(Clone)").GetComponent<NetworkObject>().OwnerClientId);
         }
         else
         {
             ChangePlayerCountServerRpc(1);
         }
+
+
+      
      
     }
     public override void OnNetworkDespawn()
@@ -67,6 +72,7 @@ public class GameManager : NetworkBehaviour
     private void StartGame()
     {
         StartGameClientRpc();
+        InfectPeople();
     }
 
     [Rpc(SendTo.Server)]
@@ -85,7 +91,14 @@ public class GameManager : NetworkBehaviour
     {
         //Randomly choose a person to infect
         int infectedPersonID = Random.Range(0, playerCount.Value);
+        InfectRpc(infectedPersonID);
+    }
 
-        //Ch
+    [Rpc(SendTo.ClientsAndHost)]
+    private void InfectRpc(int infectedPersonID)
+    {
+        //Person that gets infected
+        NetworkObject infectedPerson = NetworkManager.Singleton.SpawnManager.SpawnedObjects[(ulong)infectedPersonID];
+        infectedPerson.GetComponent<PlayerController>().GetInfected();
     }
 }
