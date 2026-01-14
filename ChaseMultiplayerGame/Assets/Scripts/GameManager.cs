@@ -13,106 +13,104 @@ public enum State
 public class GameManager : NetworkBehaviour
 {
     public State CurrentGameState = State.Setup;
-    private NetworkVariable<int> playerCount = new NetworkVariable<int>();
-    // private NetworkVariable<List<NetworkObject>> listOfPlayers = new NetworkVariable<List<NetworkObject>>();
 
     private static GameManager instance;
+  
     public static GameManager Instance { get => instance; set => instance = value; }
 
 
-  
+    [SerializeField] private SetupMenu setupMenu;
+    [SerializeField] private EndedState endedState;
 
-    private void Awake()
-    {
-        Debug.Log("DO I RUN?");
-    }
-
+    public NetworkVariable<bool> allIsInfected = new NetworkVariable<bool>(false);
     public override void OnNetworkSpawn()
     {
-        // Add to playercount
+        InitSingleton();
+    }
+    private void InitSingleton()
+    {
         if (instance != null)
         {
             Destroy(gameObject);
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
-
-        if (IsHost)
-        {
-            playerCount.Value = 1;
-            //  listOfPlayers.Value.Add()
-        }
-        else
-        {
-            ChangePlayerCountServerRpc(1);
-        }
-
-       // Debug.Log(GetComponent<NetworkObject>().OwnerClientId)
-       // Debug.Log(GameObject.Find("Player(Clone)").GetComponent<NetworkObject>().OwnerClientId);
-
-
     }
-    public override void OnNetworkDespawn()
-    {
-        if (!IsHost)
-        {
-            ChangePlayerCountServerRpc(-1);
-        }
-    }
-
-
-
+    
 
     private void Update()
     {
         switch (CurrentGameState)
         {
             case State.Setup:
-                if (!IsHost) return;
-
-                if (Input.GetKeyDown(KeyCode.Space) && playerCount.Value > 1)
-                {
-                    StartGame();
-                }
+                setupMenu.UpdateSetup();
                 break;
             case State.Playing:
-                Debug.Log("Playing");
+                Playing();
                 break;
             case State.Ended:
-
+                //Give scores or something
+                endedState.UpdateState();
                 break;
         }
     }
-
-    private void StartGame()
+    private void Playing()
     {
-        StartGameClientRpc();
+        if (IsServer is false) return;
+        CheckTimer();
+        CheckInfected();
+    }
+    private float maxTime = 120; // 120 seconds
+    private float currentTime = 0;
+    private void CheckTimer()
+    {
+        currentTime += Time.deltaTime;
+        if(currentTime >= maxTime)
+        {
+            currentTime = 0;
+            ChangeStateRpc(State.Ended);
+        }
+    }
+    private void CheckInfected()
+    {
+        var getPlayers = NetworkManager.Singleton.ConnectedClientsList;
+
+        bool allInfected = true;
+        foreach (var player in getPlayers)
+        {
+            if(player.PlayerObject.GetComponent<PlayerController>().IsInfected is false)
+            {
+                allInfected = false;
+                break;
+            }
+        }
+        if(allInfected) 
+        {
+            allIsInfected.Value = true;
+            ChangeStateRpc(State.Ended);
+        }
+    }
+    public void StartGame()
+    {
+        ChangeStateRpc(State.Playing);
         RandomlyChooseAPersonToInfect();
     }
-
-    [Rpc(SendTo.Server)]
-    private void ChangePlayerCountServerRpc(int player)
-    {
-        playerCount.Value += player;
-    }
-
-
     [Rpc(SendTo.ClientsAndHost)]
-    private void StartGameClientRpc()
+    public void ChangeStateRpc(State state)
     {
-        CurrentGameState = State.Playing;
+        if (state == CurrentGameState) return;
+        CurrentGameState = state;
     }
     private void RandomlyChooseAPersonToInfect()
     {
         //Randomly choose a person to infect
-        int infectedPersonID = Random.Range(0, playerCount.Value);
+        int infectedPersonID = Random.Range(0, NetworkManager.Singleton.ConnectedClients.Count);
         InfectRpc(infectedPersonID);
     }
 
     [Rpc(SendTo.Server)]
     public void InfectPersonServerRpc(int infectedPersonID)
     {
-        Debug.Log("Arrived in server");
         InfectRpc(infectedPersonID);
     }
 
@@ -120,7 +118,6 @@ public class GameManager : NetworkBehaviour
     private void InfectRpc(int infectedPersonID)
     {
         //Person that gets infected
-        Debug.Log("INFECTING RPC");
        // NetworkObject infectedPerson = NetworkManager.Singleton.SpawnManager.SpawnedObjects[(ulong)infectedPersonID];
         NetworkObject infectedPerson = NetworkManager.Singleton.ConnectedClients[(ulong)infectedPersonID].PlayerObject;
         infectedPerson.GetComponent<PlayerController>().GetInfected();

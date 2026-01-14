@@ -10,57 +10,23 @@ public class PlayerController : NetworkBehaviour
 
     public bool IsInfected => isInfected;
 
-    private void Awake()
-    {
-       // GetComponentInChildren<MeshRenderer>().material = nonInfectedMaterial;
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        Debug.Log($"client id{GetComponent<NetworkObject>().OwnerClientId}");
-        Debug.Log($"network id{GetComponent<NetworkObject>().NetworkObjectId}");
-
-    }
-
-    //private void Update()
-    //{
-    //    if(isInfected)
-    //    {
-    //        //Logic for effected
-    //    }
-    //    else
-    //    {
-    //        //If not effected do what?
-    //    }
-    //}
-
     public void GetInfected()
     {
         isInfected = true;
-        Debug.Log($"Player {GetComponent<NetworkObject>().OwnerClientId} has been infected");
         GetComponentInChildren<MeshRenderer>().material = infectedMaterial;
     }
 
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(isInfected)
-        {
-           //If collision is player
-           if(collision.collider.GetComponent<PlayerController>())
-            {
-                var playerToInfect = collision.collider.GetComponent<PlayerController>();
-                if (playerToInfect.IsInfected == true) return;
+        if (isInfected is false) return;
+        if (collision.collider.TryGetComponent(out PlayerController playerToInfect) is false) return;
+        if (playerToInfect.IsInfected == true) return;
 
-                //If its not infected
+        //If its not already infected
+        var ownerClientId = (int)playerToInfect.GetComponent<NetworkObject>().OwnerClientId;
+        GameManager.Instance.InfectPersonServerRpc(ownerClientId);
 
-                Debug.Log("Find person to infect with the woke virus");
-                var ownerClientId = (int)playerToInfect.GetComponent<NetworkObject>().OwnerClientId;
-                Debug.Log("players id is " + ownerClientId);
-                if (GameManager.Instance == null) Debug.Log("GameManager is null?");
-                GameManager.Instance.InfectPersonServerRpc(ownerClientId);
 
-            }
-        }
     }
 }
