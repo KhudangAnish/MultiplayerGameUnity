@@ -42,13 +42,24 @@ public class PlayerMovement : NetworkBehaviour
         transform.forward = Vector3.Lerp(transform.forward, lastDirection, 0.2f);
         // transform.position += dir * Speed * Time.deltaTime;
     }
+
+    private float airMultiplier = 0;
+    private float multiplier = 4;
     private void FixedUpdate()
     {
         if (!IsOwner || !IsSpawned) return;
 
         //Checks the collision groinded or not
-        if (CheckGround("Ground") || CheckGround("Water")) isGrounded = true;
-        else isGrounded = false;
+        if (CheckGround("Ground") || CheckGround("Water"))
+        {
+            airMultiplier = 0;
+            isGrounded = true;
+        }
+        else
+        {
+            airMultiplier -= Time.deltaTime;
+            isGrounded = false;
+        }
 
         //Acceleration
         float speed = 0;
@@ -71,7 +82,11 @@ public class PlayerMovement : NetworkBehaviour
         rb.AddForce(dir * speed, ForceMode.Acceleration);
 
         //Gravity pushes downards by more force when in a air
-        if (!isGrounded) rb.AddForce(Physics.gravity * Mathf.Lerp(0, 30, 0.05f), ForceMode.Acceleration);
+        if (!isGrounded)
+        {
+            Debug.Log(Physics.gravity * Mathf.Lerp(0, 30, 0.05f) + new Vector3(0, airMultiplier * multiplier, 0));
+            rb.AddForce(Physics.gravity * Mathf.Lerp(0, 30, 0.05f) + new Vector3(0, airMultiplier * multiplier, 0), ForceMode.Acceleration);
+        }
     }
 
     private bool CheckGround(string layer)
