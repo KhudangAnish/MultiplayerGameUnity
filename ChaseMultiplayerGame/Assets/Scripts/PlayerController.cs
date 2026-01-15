@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
-   [SerializeField] private Material nonInfectedMaterial;
-   [SerializeField] private Material infectedMaterial;
+   [SerializeField] private GameObject nonInfected;
+   [SerializeField] private GameObject infected;
 
     private bool isInfected = false;
 
@@ -17,7 +17,8 @@ public class PlayerController : NetworkBehaviour
     public void GetInfected()
     {
         isInfected = true;
-        GetComponentInChildren<MeshRenderer>().material = infectedMaterial;
+        nonInfected.SetActive(false);
+        infected.SetActive(true);
     }
 
 
@@ -39,7 +40,9 @@ public class PlayerController : NetworkBehaviour
         transform.position = Random.insideUnitSphere * 20;
         transform.position = new Vector3(transform.position.x, 0, transform.position.z);
 
-        GetComponentInChildren<MeshRenderer>().material = nonInfectedMaterial;
+        nonInfected.SetActive(true);
+        infected.SetActive(false);
+
         isInfected = false;
     }
 
