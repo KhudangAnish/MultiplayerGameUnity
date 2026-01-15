@@ -16,9 +16,11 @@ public class PlayerMovement : NetworkBehaviour
     bool isJump = false;
 
     PlayerController controller;
+    PlayerStats playerStats;
     private void Start()
     {
         controller = GetComponent<PlayerController>();
+        playerStats = GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -70,7 +72,7 @@ public class PlayerMovement : NetworkBehaviour
         }
         else
         {
-            speed = Mathf.Clamp(rb.linearVelocity.magnitude, 12, 15);
+            speed = Mathf.Clamp(rb.linearVelocity.magnitude, 12, playerStats.GetSpeed());
         }
 
         //Deacceleration

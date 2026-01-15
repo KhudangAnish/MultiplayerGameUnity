@@ -34,6 +34,7 @@ public class PlayerController : NetworkBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (isInfected is false) return;
+        if (collision.collider.GetComponent<PlayerStats>().HasProtection()) return; //Can't do anything when he is protected
         if (collision.collider.TryGetComponent(out PlayerController playerToInfect) is false) return;
         if (playerToInfect.IsInfected == true) return;
 

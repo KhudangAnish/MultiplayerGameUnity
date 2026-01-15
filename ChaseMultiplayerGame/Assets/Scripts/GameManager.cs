@@ -169,6 +169,10 @@ public class GameManager : NetworkBehaviour
     {
         // NetworkManager.Singleton.
         NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(despawnGameObject, out NetworkObject n);
+      
+
+        //MIGHT HAVE PROBLEMS WITH LATE JOINERS
+        if (!n.IsSpawned) return; 
         n.Despawn(true);
         //if (despawnGameObject.TryGet(out NetworkObject n)) return;
         // n.Despawn(true);
