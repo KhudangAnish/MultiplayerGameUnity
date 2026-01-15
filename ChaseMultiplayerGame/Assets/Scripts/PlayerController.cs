@@ -1,6 +1,9 @@
+using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -10,17 +13,49 @@ public class PlayerController : NetworkBehaviour
     private bool isInfected = false;
 
     public bool IsInfected => isInfected;
+    // read from other clients
+    private NetworkVariable<FixedString64Bytes> PlayerUsername
+        = new NetworkVariable<FixedString64Bytes>("UnKnown",
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Owner);
+
+    private NetworkVariable<int> ProfileIndex
+      = new NetworkVariable<int>(0,
+          NetworkVariableReadPermission.Everyone,
+          NetworkVariableWritePermission.Owner);
+
+    [SerializeField] TextMeshProUGUI usernameText;
+    [SerializeField] Image profileImage;
     public override void OnNetworkSpawn()
     {
+        PlayerUsername.OnValueChanged += SetUsernameText;
+        SetUsernameText(default, PlayerUsername.Value);
 
-        if (IsOwner)
-        {
-            CameraController.Instance.InitializeCamera(transform);
-        }
+        if (IsOwner) CameraController.Instance.InitializeCamera(transform);
     }
     private void Start()
     {
+        ProfileIndex.OnValueChanged += SetUserProfileIndex;
+        SetUserProfileIndex(default, ProfileIndex.Value);
         Reset();
+    }
+
+    public void SetMyName()
+    {
+        SetUsernameText(default, PlayerUsername.Value);
+        if (IsOwner)
+        {
+            PlayerUsername.Value = GameManager.Instance.GetUsername();
+        }
+    }
+
+    public void SetMyProfile()
+    {
+        SetUserProfileIndex(default, ProfileIndex.Value);
+        if (IsOwner)
+        {
+            ProfileIndex.Value = GameManager.Instance.GetProfileIndex();
+        }
     }
 
     public void GetInfected()
@@ -55,4 +90,12 @@ public class PlayerController : NetworkBehaviour
         isInfected = false;
     }
 
+    public void SetUsernameText(FixedString64Bytes prev, FixedString64Bytes aName)
+    {
+        usernameText.text = aName.ToString();
+    }
+    public void SetUserProfileIndex(int prev, int aIndex)
+    {
+        profileImage.sprite = GameManager.Instance.profileSprites[aIndex];
+    }
 }

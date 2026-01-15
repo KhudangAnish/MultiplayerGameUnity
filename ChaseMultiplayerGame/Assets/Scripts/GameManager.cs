@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -28,8 +29,47 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private EndedState endedState;
 
     [SerializeField]public  Transform[] spwawnPosition;
+
+    [SerializeField] public Sprite[] profileSprites;
+    [SerializeField] TMP_InputField m_UserName;
+
+    int indexProfile;
+    public string GetUsername()
+    {
+        return m_UserName.text;
+    }
+    public int GetProfileIndex()
+    {
+        return indexProfile;
+    }
+
+    public void ChangeUserName(string aInput)
+    {
+        var getPlayers = NetworkManager.Singleton.ConnectedClientsList;
+        foreach (var player in getPlayers)
+        {
+            if (player.PlayerObject == IsOwner || player.PlayerObject == IsClient)
+            {
+                player.PlayerObject.GetComponent<PlayerController>().SetMyName();
+            }
+        }
+    }
+    public void ChangeProfileIndex(int aInput)
+    {
+        indexProfile = aInput;
+        var getPlayers = NetworkManager.Singleton.ConnectedClientsList;
+        foreach (var player in getPlayers)
+        {
+            if (player.PlayerObject == IsOwner || player.PlayerObject == IsClient)
+            {
+                player.PlayerObject.GetComponent<PlayerController>().SetMyProfile();
+            }
+        }
+    }
+
     public override void OnNetworkSpawn()
     {
+        m_UserName.onEndEdit.AddListener(ChangeUserName);
         InitSingleton();
     }
     private void InitSingleton()
