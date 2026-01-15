@@ -8075,7 +8075,7 @@ GameObject:
   - component: {fileID: 1500236913}
   - component: {fileID: 1500236912}
   - component: {fileID: 1500236911}
-  m_Layer: 6
+  m_Layer: 4
   m_Name: 'Water '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
