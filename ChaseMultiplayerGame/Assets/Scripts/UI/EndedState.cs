@@ -22,5 +22,11 @@ public class EndedState : MonoBehaviour
                 endedText.text = "SOME PEOPLE MANAGED TO ESCAPE - Humans won!";
             }
         }
+
+        if (!GameManager.Instance.allIsInfected.Value)
+        {
+            runOnce = false;
+            endedUI.SetActive(false);
+        }
     }
 }

@@ -13,7 +13,9 @@ public enum State
 }
 public class GameManager : NetworkBehaviour
 {
-    public State CurrentGameState = State.Setup;
+    //making currentstate as network variable
+    public NetworkVariable<State> CurrentGameState =
+    new NetworkVariable<State>(State.Setup);
 
     private static GameManager instance;
   
@@ -23,25 +25,30 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private SetupMenu setupMenu;
     [SerializeField] private EndedState endedState;
 
-    public NetworkVariable<bool> allIsInfected = new NetworkVariable<bool>(false);
+    public NetworkVariable<bool> allIsInfected =
+    new NetworkVariable<bool>(false);
+
     public override void OnNetworkSpawn()
     {
         InitSingleton();
     }
     private void InitSingleton()
     {
-        if (instance != null)
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
         {
             Destroy(gameObject);
         }
-        instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     
 
     private void Update()
     {
-        switch (CurrentGameState)
+        switch (CurrentGameState.Value)
         {
             case State.Setup:
                 setupMenu.UpdateSetup();
@@ -50,7 +57,7 @@ public class GameManager : NetworkBehaviour
                 Playing();
                 break;
             case State.Ended:
-                //Give scores or something
+                //Give scores or something             
                 endedState.UpdateState();
                 break;
         }
@@ -58,7 +65,7 @@ public class GameManager : NetworkBehaviour
     private void Playing()
     {
         if (IsServer is false) return;
-        CheckTimer();
+        //CheckTimer();
         CheckInfected();
     }
     private float maxTime = 120; // 120 seconds
@@ -74,36 +81,38 @@ public class GameManager : NetworkBehaviour
     }
     private void CheckInfected()
     {
+        if (NetworkManager.Singleton == null) return;
         var getPlayers = NetworkManager.Singleton.ConnectedClientsList;
 
         bool allInfected = true;
         foreach (var player in getPlayers)
         {
-            if(player.PlayerObject.GetComponent<PlayerController>().IsInfected is false)
+            if (player.PlayerObject.GetComponent<PlayerController>().IsInfected is false)
             {
                 allInfected = false;
                 break;
             }
         }
-        if(allInfected) 
+        if (allInfected)
         {
             allIsInfected.Value = true;
-            //ChangeStateRpc(State.Ended);
+            ChangeStateRpc(State.Ended);
             StartCoroutine(DelayRestart());
         }
     }
 
     IEnumerator DelayRestart()
     {
-        yield return new WaitForSeconds(0f);
-        OnGameRestartRpc();
-
+        yield return new WaitForSeconds(1f);
+        OnGameRestart_ClientRpc();
+        allIsInfected.Value = false;
+        yield return new WaitForSeconds(1f);
         currentTime = 0;
         StartGame();
     }
 
-    [Rpc(SendTo.ClientsAndHost)]
-    public void OnGameRestartRpc()
+    [ClientRpc]
+    public void OnGameRestart_ClientRpc()
     {
         var getPlayers = NetworkManager.Singleton.ConnectedClientsList;
         foreach (var player in getPlayers)
@@ -117,11 +126,11 @@ public class GameManager : NetworkBehaviour
         ChangeStateRpc(State.Playing);
         RandomlyChooseAPersonToInfect();
     }
-    [Rpc(SendTo.ClientsAndHost)]
+
     public void ChangeStateRpc(State state)
     {
-        if (state == CurrentGameState) return;
-        CurrentGameState = state;
+        if (state == CurrentGameState.Value) return;
+        CurrentGameState.Value = state;
     }
     private void RandomlyChooseAPersonToInfect()
     {
