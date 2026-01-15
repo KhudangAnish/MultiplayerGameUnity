@@ -13,20 +13,19 @@ public enum State
 }
 public class GameManager : NetworkBehaviour
 {
+    //These two need to reset on all of the clients and host
     //making currentstate as network variable
     public NetworkVariable<State> CurrentGameState =
     new NetworkVariable<State>(State.Setup);
+    public NetworkVariable<bool> allIsInfected =
+    new NetworkVariable<bool>(false);
 
     private static GameManager instance;
-  
     public static GameManager Instance { get => instance; set => instance = value; }
 
 
     [SerializeField] private SetupMenu setupMenu;
     [SerializeField] private EndedState endedState;
-
-    public NetworkVariable<bool> allIsInfected =
-    new NetworkVariable<bool>(false);
 
     public override void OnNetworkSpawn()
     {
@@ -65,7 +64,7 @@ public class GameManager : NetworkBehaviour
     private void Playing()
     {
         if (IsServer is false) return;
-        //CheckTimer();
+        CheckTimer();
         CheckInfected();
     }
     private float maxTime = 120; // 120 seconds
