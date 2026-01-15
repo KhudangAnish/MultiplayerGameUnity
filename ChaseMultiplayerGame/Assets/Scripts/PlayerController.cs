@@ -9,6 +9,10 @@ public class PlayerController : NetworkBehaviour
     private bool isInfected = false;
 
     public bool IsInfected => isInfected;
+    public override void OnNetworkSpawn()
+    {
+        Reset();
+    }
 
     public void GetInfected()
     {
