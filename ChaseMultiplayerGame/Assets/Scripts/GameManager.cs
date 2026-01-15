@@ -153,4 +153,24 @@ public class GameManager : NetworkBehaviour
         NetworkObject infectedPerson = NetworkManager.Singleton.ConnectedClients[(ulong)infectedPersonID].PlayerObject;
         infectedPerson.GetComponent<PlayerController>().GetInfected();
     }
+
+
+
+
+
+    //Used to destroy/Despawn objects on the network for everyone
+    public void DespawnAGameObject(ulong despawnGameObject)
+    {
+        DespawnAGameObjectRpc(despawnGameObject);
+    }
+
+    [Rpc(SendTo.Server)]
+    private void DespawnAGameObjectRpc(ulong despawnGameObject)
+    {
+        // NetworkManager.Singleton.
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(despawnGameObject, out NetworkObject n);
+        n.Despawn(true);
+        //if (despawnGameObject.TryGet(out NetworkObject n)) return;
+        // n.Despawn(true);
+    }
 }
