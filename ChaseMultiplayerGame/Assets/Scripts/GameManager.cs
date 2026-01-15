@@ -27,6 +27,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private SetupMenu setupMenu;
     [SerializeField] private EndedState endedState;
 
+    [SerializeField]public  Transform[] spwawnPosition;
     public override void OnNetworkSpawn()
     {
         InitSingleton();

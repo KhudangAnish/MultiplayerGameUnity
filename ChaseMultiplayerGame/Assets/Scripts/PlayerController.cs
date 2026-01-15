@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
@@ -10,6 +11,14 @@ public class PlayerController : NetworkBehaviour
 
     public bool IsInfected => isInfected;
     public override void OnNetworkSpawn()
+    {
+
+        if (IsOwner)
+        {
+            CameraController.Instance.InitializeCamera(transform);
+        }
+    }
+    private void Start()
     {
         Reset();
     }
@@ -37,8 +46,7 @@ public class PlayerController : NetworkBehaviour
 
     public void Reset()
     {
-        transform.position = Random.insideUnitSphere * 20;
-        transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+        transform.position = GameManager.Instance.spwawnPosition[Random.Range(0, GameManager.Instance.spwawnPosition.Length)].position;
 
         nonInfected.SetActive(true);
         infected.SetActive(false);
