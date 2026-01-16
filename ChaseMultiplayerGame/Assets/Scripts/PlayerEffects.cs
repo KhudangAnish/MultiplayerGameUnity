@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 
@@ -6,7 +7,8 @@ using UnityEngine;
 public enum Effect
 {
     Speed,
-    Protection
+    Protection,
+    Invisible
 }
 
 
@@ -35,10 +37,13 @@ public class AppliedEffect
         switch (effect)
         {
             case Effect.Speed:
-                playerStats.ModifyStatsSpeedServerRpc(100);
+                playerStats.ModifyStatsSuperFast(true);
                 break;
             case Effect.Protection:
-                playerStats.ModifyStatsProtectionServerRpc(true);
+                playerStats.ModifyStatsProtection(true);
+                break;
+            case Effect.Invisible:
+                playerStats.ModifyStatsInvisibility(true);
                 break;
         }
     }
@@ -47,10 +52,13 @@ public class AppliedEffect
         switch (effect)
         {
             case Effect.Speed:
-                playerStats.ModifyStatsSpeedServerRpc(-100);
+                playerStats.ModifyStatsSuperFast(false);
                 break;
             case Effect.Protection:
-                playerStats.ModifyStatsProtectionServerRpc(false);
+                playerStats.ModifyStatsProtection(false);
+                break;
+            case Effect.Invisible:
+                playerStats.ModifyStatsInvisibility(false);
                 break;
         }
     }
@@ -61,7 +69,7 @@ public class AppliedEffect
     }
 
 }
-public class PlayerEffects : MonoBehaviour
+public class PlayerEffects : NetworkBehaviour
 {
     public List<AppliedEffect> appliedEffects = new();
     [SerializeField] private PlayerStats playerStats;

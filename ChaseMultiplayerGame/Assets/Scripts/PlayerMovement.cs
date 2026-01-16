@@ -72,7 +72,7 @@ public class PlayerMovement : NetworkBehaviour
         }
         else
         {
-            speed = Mathf.Clamp(rb.linearVelocity.magnitude, 12, playerStats.GetSpeed());
+            speed = Mathf.Clamp(rb.linearVelocity.magnitude, 12, 15);
         }
 
         //Deacceleration
@@ -81,7 +81,7 @@ public class PlayerMovement : NetworkBehaviour
         //Movement
         //Applying Acceleration less while in Air
         dir = isGrounded ? dir : Vector3.ClampMagnitude(dir, 0.25f);
-        rb.AddForce(dir * speed, ForceMode.Acceleration);
+        rb.AddForce(dir * (speed * (playerStats.IsSuperFast() ? 4 : 1)), ForceMode.Acceleration);
 
         //Gravity pushes downards by more force when in a air
         if (!isGrounded)

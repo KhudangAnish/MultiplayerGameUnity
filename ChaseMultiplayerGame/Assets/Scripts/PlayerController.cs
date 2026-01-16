@@ -12,6 +12,11 @@ public class PlayerController : NetworkBehaviour
 
     private bool isInfected = false;
 
+    [SerializeField] private PlayerStats playerstats;
+    [SerializeField] private GameObject normalBody;
+    [SerializeField] private GameObject playerUsernameGameObject;
+    [SerializeField] private GameObject protectionBubble;
+
     public bool IsInfected => isInfected;
     // read from other clients
     private NetworkVariable<FixedString64Bytes> PlayerUsername
@@ -38,6 +43,7 @@ public class PlayerController : NetworkBehaviour
         ProfileIndex.OnValueChanged += SetUserProfileIndex;
         SetUserProfileIndex(default, ProfileIndex.Value);
         Reset();
+        playerstats = GetComponent<PlayerStats>();
     }
 
     public void SetMyName()
@@ -65,7 +71,25 @@ public class PlayerController : NetworkBehaviour
         infected.SetActive(true);
     }
 
+    private void Update()
+    {
 
+        if (playerstats.HasInvisibility())
+        {
+            normalBody.SetActive(false);
+            playerUsernameGameObject.SetActive(false);
+        }
+        else
+        {
+            normalBody.SetActive(true);
+            playerUsernameGameObject.SetActive(true);
+        }
+        if (playerstats.HasProtection())
+            protectionBubble.SetActive(true);
+        else
+            protectionBubble.SetActive(false);
+
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (isInfected is false) return;
