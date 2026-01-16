@@ -10,6 +10,7 @@ public class PlayerMovement : NetworkBehaviour
     float horizontal;
     float vertical;
     Vector3 lastDirection;
+    public Vector3 GetLastDirection => lastDirection;
 
     [SerializeField] GameObject footPoint;
     bool isGrounded = false;
