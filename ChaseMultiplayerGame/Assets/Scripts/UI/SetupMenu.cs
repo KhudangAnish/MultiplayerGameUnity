@@ -6,6 +6,8 @@ public class SetupMenu : NetworkBehaviour
     private const int minimumPlayersToStart = 2;
     [SerializeField] private GameObject startGameUI;
 
+    [SerializeField] GameObject profileMenu;
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -39,5 +41,13 @@ public class SetupMenu : NetworkBehaviour
     {
         startGameUI.SetActive(false);
         GameManager.Instance.StartGame();
+        DisableProfileMenu_ClientRpc();
+        //Disable profilemenu by all clients
+    }
+
+    [ClientRpc]
+    void DisableProfileMenu_ClientRpc()
+    {
+        profileMenu.SetActive(false);
     }
 }

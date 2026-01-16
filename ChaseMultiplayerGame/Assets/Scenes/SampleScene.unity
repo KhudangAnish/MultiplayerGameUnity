@@ -1098,7 +1098,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 107593310}
-  - component: {fileID: 107593311}
   m_Layer: 0
   m_Name: Position5
   m_TagString: Untagged
@@ -1121,27 +1120,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926874973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &107593311
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 107593309}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &112236287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2402,7 +2380,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 245600700}
-  - component: {fileID: 245600701}
   m_Layer: 0
   m_Name: Position2
   m_TagString: Untagged
@@ -2425,27 +2402,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926874973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &245600701
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 245600699}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &281093038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5165,6 +5121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SetupMenu
   ShowTopMostFoldoutHeaderGroup: 1
   startGameUI: {fileID: 34116409}
+  profileMenu: {fileID: 538484168}
 --- !u!114 &596826865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6808,7 +6765,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 847004560}
-  - component: {fileID: 847004561}
   m_Layer: 0
   m_Name: Position3
   m_TagString: Untagged
@@ -6831,27 +6787,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926874973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &847004561
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 847004559}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &878886276
 GameObject:
   m_ObjectHideFlags: 0
@@ -6861,7 +6796,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 878886277}
-  - component: {fileID: 878886278}
   m_Layer: 0
   m_Name: Position4
   m_TagString: Untagged
@@ -6884,27 +6818,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926874973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &878886278
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 878886276}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &888949720
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7949,7 +7862,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1173572965}
-  - component: {fileID: 1173572966}
   m_Layer: 0
   m_Name: Position1
   m_TagString: Untagged
@@ -7972,27 +7884,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1926874973}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1173572966
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1173572964}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1177215626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11444,18 +11335,6 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: SetupMenu, Assembly-CSharp
         m_MethodName: OnStartGame
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 538484168}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
