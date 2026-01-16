@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
-  GlobalObjectIdHash: 845401964
+  GlobalObjectIdHash: 1220750698
   InScenePlacedSourceGlobalObjectIdHash: 1220750698
   DeferredDespawnTick: 0
   Ownership: 1
@@ -222,6 +222,7 @@ MonoBehaviour:
   normalBody: {fileID: 6608694665361035438}
   playerUsernameGameObject: {fileID: 3318670756045474405}
   protectionBubble: {fileID: 6600500961858672503}
+  profileHoder: {fileID: 1721359021643650986}
   usernameText: {fileID: 4148482051365694074}
   profileImage: {fileID: 5241811630313414577}
 --- !u!54 &-4068251146618533666

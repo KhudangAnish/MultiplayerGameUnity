@@ -101,6 +101,7 @@ public class GameManager : NetworkBehaviour
                 endedState.UpdateState();
                 break;
         }
+
     }
     private void Playing()
     {

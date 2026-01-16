@@ -29,6 +29,8 @@ public class PlayerController : NetworkBehaviour
           NetworkVariableReadPermission.Everyone,
           NetworkVariableWritePermission.Owner);
 
+    [SerializeField] Transform profileHoder;
+
     [SerializeField] TextMeshProUGUI usernameText;
     [SerializeField] Image profileImage;
     public override void OnNetworkSpawn()
@@ -73,7 +75,7 @@ public class PlayerController : NetworkBehaviour
 
     private void Update()
     {
-
+        profileHoder.forward = Camera.main.transform.forward;
         if (playerstats.HasInvisibility())
         {
             normalBody.SetActive(false);
