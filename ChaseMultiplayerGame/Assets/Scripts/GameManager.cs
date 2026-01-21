@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using TMPro;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 
@@ -83,6 +86,7 @@ public class GameManager : NetworkBehaviour
         {
             Destroy(gameObject);
         }
+        ChangeToLocalIP();
     }
     
 
@@ -218,4 +222,22 @@ public class GameManager : NetworkBehaviour
         //if (despawnGameObject.TryGet(out NetworkObject n)) return;
         // n.Despawn(true);
     }
+
+  
+    void ChangeToLocalIP()
+    {
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(GetLocalIP(), 7778);
+        // change the IP we want to connect to!
+    }
+    string GetLocalIP()
+    {
+        var host = Dns.GetHostEntry(Dns.GetHostName());
+        foreach (var ip in host.AddressList)
+        {
+            if (ip.AddressFamily == AddressFamily.InterNetwork)
+                return ip.ToString();
+        }
+        return "No IPv4 address found";
+    }
+
 }
