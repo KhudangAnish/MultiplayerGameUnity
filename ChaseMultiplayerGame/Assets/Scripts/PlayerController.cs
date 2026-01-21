@@ -108,7 +108,7 @@ public class PlayerController : NetworkBehaviour
 
     public void Reset()
     {
-        transform.position = GameManager.Instance.spwawnPosition[Random.Range(0, GameManager.Instance.spwawnPosition.Length)].position;
+        transform.position = GameManager.Instance.spawnPosition[Random.Range(0, GameManager.Instance.spawnPosition.Length)].position;
 
         nonInfected.SetActive(true);
         infected.SetActive(false);

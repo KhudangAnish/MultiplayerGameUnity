@@ -1,4 +1,4 @@
-using System.Collections;
+ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -31,7 +31,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private SetupMenu setupMenu;
     [SerializeField] private EndedState endedState;
 
-    [SerializeField]public  Transform[] spwawnPosition;
+    [SerializeField]public  Transform[] spawnPosition;
 
     [SerializeField] public Sprite[] profileSprites;
     [SerializeField] TMP_InputField m_UserName;
@@ -86,10 +86,8 @@ public class GameManager : NetworkBehaviour
         {
             Destroy(gameObject);
         }
-        ChangeToLocalIP();
+       // ChangeToLocalIP();
     }
-    
-
     private void Update()
     {
         switch (CurrentGameState.Value)
